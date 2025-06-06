@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepNotes - Comprehensive Educational Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-dark: #0f172a;
+            --primary-blue: #1e293b;
+            --accent-blue: #60a5fa;
+            --accent-purple: #a78bfa;
+            --text-light: #e2e8f0;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a:hover {
+            background: rgba(96, 165, 250, 0.1);
+            color: var(--accent-blue);
+        }
+
+        nav a.active {
+            background: rgba(96, 165, 250, 0.15);
+            color: var(--accent-blue);
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(96, 165, 250, 0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .subject-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .subject-list li {
+            margin-bottom: 12px;
+        }
+
+        .subject-list a {
+            display: block;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subject-list a:hover, .subject-list a.active {
+            background: rgba(96, 165, 250, 0.1);
+            color: var(--accent-blue);
+        }
+
+        .chapter-list {
+            list-style: none;
+        }
+
+        .chapter-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .chapter-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+        }
+
+        .chapter-list a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+            padding: 6px 0;
+        }
+
+        .chapter-list a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Content Area */
+        .content-area {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(96, 165, 250, 0.1);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            font-size: 0.8rem;
+        }
+
+        .chapter-header {
+            margin-bottom: 2rem;
+        }
+
+        .chapter-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .chapter-header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 800px;
+        }
+
+        .topic-section {
+            margin-bottom: 3rem;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+
+        .topic-header i {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+            background: rgba(96, 165, 250, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .topic-header h2 {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+        }
+
+        .topic-content {
+            padding-left: 15px;
+            border-left: 2px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .topic-content h3 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--accent-purple);
+        }
+
+        .topic-content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .topic-content ul, .topic-content ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .topic-content li {
+            margin-bottom: 0.8rem;
+        }
+
+        .highlight-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .equation {
+            font-family: 'Cambria', serif;
+            font-size: 1.4rem;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(96, 165, 250, 0.1);
+        }
+
+        th {
+            background: rgba(96, 165, 250, 0.15);
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: rgba(96, 165, 250, 0.05);
+        }
+
+        /* Revision Section */
+        .revision-section {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(21, 30, 47, 0.9));
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            border: 1px solid var(--accent-blue);
+        }
+
+        .revision-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .revision-header i {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+        }
+
+        .revision-header h2 {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+        }
+
+        .revision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 1rem;
+        }
+
+        .revision-card {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent-purple);
+            transition: var(--transition);
+        }
+
+        .revision-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .revision-card h3 {
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .revision-card ul {
+            padding-left: 1.2rem;
+        }
+
+        .revision-card li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .revision-card li::before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 3rem 2rem 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-column h3 {
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(96, 165, 250, 0.1);
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .chapter-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">DN</div>
+                <div class="logo-text">
+                    <h1>DeepNotes</h1>
+                    <p>Comprehensive Educational Platform</p>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Subjects</a></li>
+                    <li><a href="#"><i class="fas fa-graduation-cap"></i> Classes</a></li>
+                    <li><a href="#"><i class="fas fa-download"></i> Downloads</a></li>
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2><i class="fas fa-book-open"></i> Subjects</h2>
+            <ul class="subject-list">
+                <li><a href="#" class="active"><i class="fas fa-leaf"></i> Biology</a></li>
+                <li><a href="#"><i class="fas fa-atom"></i> Physics</a></li>
+                <li><a href="#"><i class="fas fa-flask"></i> Chemistry</a></li>
+                <li><a href="#"><i class="fas fa-calculator"></i> Mathematics</a></li>
+                <li><a href="#"><i class="fas fa-globe-asia"></i> Social Science</a></li>
+                <li><a href="#"><i class="fas fa-code"></i> Computer Science</a></li>
+            </ul>
+
+            <h2><i class="fas fa-list-ol"></i> Chapters</h2>
+            <ul class="chapter-list">
+                <li><a href="#">Chapter 1: Chemical Reactions</a></li>
+                <li><a href="#">Chapter 2: Acids, Bases and Salts</a></li>
+                <li><a href="#">Chapter 3: Metals and Non-metals</a></li>
+                <li><a href="#">Chapter 4: Carbon and its Compounds</a></li>
+                <li><a href="#" class="active">Chapter 5: Life Processes</a></li>
+                <li><a href="#">Chapter 6: Control and Coordination</a></li>
+                <li><a href="#">Chapter 7: How do Organisms Reproduce?</a></li>
+                <li><a href="#">Chapter 8: Heredity and Evolution</a></li>
+            </ul>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <div class="breadcrumb">
+                <a href="#">Home</a> <i class="fas fa-chevron-right"></i>
+                <a href="#">Biology</a> <i class="fas fa-chevron-right"></i>
+                <a href="#">Class 10</a> <i class="fas fa-chevron-right"></i>
+                <span>Chapter 5: Life Processes</span>
+            </div>
+
+            <div class="chapter-header">
+                <h1>Life Processes</h1>
+                <p>Comprehensive notes covering all essential topics related to nutrition, respiration, transportation, and excretion in living organisms.</p>
+            </div>
+
+            <!-- Nutrition Section -->
+            <section class="topic-section">
+                <div class="topic-header">
+                    <i class="fas fa-apple-alt"></i>
+                    <h2>Nutrition</h2>
+                </div>
+                
+                <div class="topic-content">
+                    <h3>Autotrophic Nutrition</h3>
+                    <p>Autotrophic nutrition is the process by which organisms produce their own food using inorganic materials like CO₂ and water. This process is primarily carried out through photosynthesis in green plants.</p>
+                    
+                    <div class="highlight-box">
+                        <p><strong>Photosynthesis:</strong> The process by which green plants convert light energy into chemical energy, synthesizing organic compounds from inorganic materials.</p>
+                        <div class="equation">
+                            6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂
+                        </div>
+                    </div>
+                    
+                    <h4>Requirements for Photosynthesis:</h4>
+                    <ul>
+                        <li><strong>Carbon Dioxide:</strong> Enters through stomata in leaves</li>
+                        <li><strong>Water:</strong> Absorbed by roots from soil</li>
+                        <li><strong>Sunlight:</strong> Energy source for the process</li>
+                        <li><strong>Chlorophyll:</strong> Green pigment that traps light energy</li>
+                    </ul>
+                    
+                    <h3>Stomata</h3>
+                    <p>Stomata are microscopic pores found on the surface of leaves and stems that facilitate gas exchange and transpiration.</p>
+                    
+                    <h4>Functions of Stomata:</h4>
+                    <ul>
+                        <li>Exchange of gases (O₂ and CO₂) between plant and atmosphere</li>
+                        <li>Transpiration - loss of water vapor from plant surfaces</li>
+                        <li>Regulation of temperature through evaporative cooling</li>
+                    </ul>
+                    
+                    <h3>Heterotrophic Nutrition</h3>
+                    <p>Heterotrophic nutrition is the mode of nutrition where organisms obtain food from other sources since they cannot synthesize their own food.</p>
+                    
+                    <h4>Types of Heterotrophic Nutrition:</h4>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Examples</th>
+                        </tr>
+                        <tr>
+                            <td>Holozoic</td>
+                            <td>Ingestion and digestion of solid food</td>
+                            <td>Humans, animals</td>
+                        </tr>
+                        <tr>
+                            <td>Saprophytic</td>
+                            <td>Feeding on dead and decaying matter</td>
+                            <td>Fungi, bacteria</td>
+                        </tr>
+                        <tr>
+                            <td>Parasitic</td>
+                            <td>Deriving nutrition from host organisms</td>
+                            <td>Tapeworms, Cuscuta</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>Human Digestive System</h3>
+                    <p>The human digestive system consists of the alimentary canal and associated glands that work together to break down complex food substances into simpler absorbable forms.</p>
+                    
+                    <h4>Key Organs and Functions:</h4>
+                    <ul>
+                        <li><strong>Mouth:</strong> Mechanical digestion through chewing</li>
+                        <li><strong>Stomach:</strong> Secretes gastric juice for protein digestion</li>
+                        <li><strong>Small Intestine:</strong> Complete digestion and absorption</li>
+                        <li><strong>Liver:</strong> Produces bile for fat emulsification</li>
+                        <li><strong>Pancreas:</strong> Secretes digestive enzymes</li>
+                        <li><strong>Large Intestine:</strong> Water absorption and feces formation</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Respiration Section -->
+            <section class="topic-section">
+                <div class="topic-header">
+                    <i class="fas fa-lungs"></i>
+                    <h2>Respiration</h2>
+                </div>
+                
+                <div class="topic-content">
+                    <h3>Cellular Respiration</h3>
+                    <p>Cellular respiration is the process by which cells break down glucose to produce energy in the form of ATP. This process occurs in three main stages: glycolysis, Krebs cycle, and electron transport chain.</p>
+                    
+                    <h4>Types of Respiration:</h4>
+                    <table>
+                        <tr>
+                            <th>Type</th>
+                            <th>Oxygen Requirement</th>
+                            <th>Energy Yield</th>
+                            <th>End Products</th>
+                        </tr>
+                        <tr>
+                            <td>Aerobic Respiration</td>
+                            <td>Requires oxygen</td>
+                            <td>36 ATP per glucose</td>
+                            <td>CO₂ + H₂O</td>
+                        </tr>
+                        <tr>
+                            <td>Anaerobic Respiration</td>
+                            <td>No oxygen required</td>
+                            <td>2 ATP per glucose</td>
+                            <td>Lactic acid or Ethanol + CO₂</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>Human Respiratory System</h3>
+                    <p>The human respiratory system facilitates the exchange of gases between the body and the environment, providing oxygen to cells and removing carbon dioxide.</p>
+                    
+                    <h4>Respiratory Pathway:</h4>
+                    <ul>
+                        <li><strong>Nostrils:</strong> Air enters the body</li>
+                        <li><strong>Nasal Passage:</strong> Air is filtered and warmed</li>
+                        <li><strong>Pharynx:</strong> Common passage for air and food</li>
+                        <li><strong>Larynx:</strong> Voice box containing vocal cords</li>
+                        <li><strong>Trachea:</strong> Windpipe leading to bronchi</li>
+                        <li><strong>Bronchi:</strong> Branch into smaller bronchioles</li>
+                        <li><strong>Alveoli:</strong> Site of gas exchange</li>
+                    </ul>
+                    
+                    <h3>Breathing Mechanism</h3>
+                    <p>Breathing involves two processes: inhalation (taking in oxygen-rich air) and exhalation (expelling carbon dioxide-rich air).</p>
+                    
+                    <h4>Mechanism of Breathing:</h4>
+                    <table>
+                        <tr>
+                            <th>Process</th>
+                            <th>Inhalation</th>
+                            <th>Exhalation</th>
+                        </tr>
+                        <tr>
+                            <td>Diaphragm</td>
+                            <td>Contracts and flattens</td>
+                            <td>Relaxes and becomes dome-shaped</td>
+                        </tr>
+                        <tr>
+                            <td>Rib Cage</td>
+                            <td>Moves upward and outward</td>
+                            <td>Moves downward and inward</td>
+                        </tr>
+                        <tr>
+                            <td>Lung Volume</td>
+                            <td>Increases</td>
+                            <td>Decreases</td>
+                        </tr>
+                        <tr>
+                            <td>Air Pressure</td>
+                            <td>Decreases</td>
+                            <td>Increases</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Transportation Section -->
+            <section class="topic-section">
+                <div class="topic-header">
+                    <i class="fas fa-heartbeat"></i>
+                    <h2>Transportation</h2>
+                </div>
+                
+                <div class="topic-content">
+                    <h3>Human Circulatory System</h3>
+                    <p>The circulatory system in humans consists of the heart, blood vessels, and blood that work together to transport substances throughout the body.</p>
+                    
+                    <h4>Components of Blood:</h4>
+                    <ul>
+                        <li><strong>Plasma:</strong> Liquid matrix containing water, proteins, and dissolved substances</li>
+                        <li><strong>Red Blood Cells (RBCs):</strong> Carry oxygen using hemoglobin</li>
+                        <li><strong>White Blood Cells (WBCs):</strong> Provide immunity against pathogens</li>
+                        <li><strong>Platelets:</strong> Essential for blood clotting</li>
+                    </ul>
+                    
+                    <h3>Double Circulation</h3>
+                    <p>Human circulation is called double circulation because blood passes through the heart twice during one complete cycle:</p>
+                    
+                    <h4>Circulatory Pathways:</h4>
+                    <ul>
+                        <li><strong>Pulmonary Circulation:</strong> Heart → Lungs → Heart</li>
+                        <li><strong>Systemic Circulation:</strong> Heart → Body → Heart</li>
+                    </ul>
+                    
+                    <h3>Transport in Plants</h3>
+                    <p>Plants have specialized tissues for transporting water, minerals, and food throughout their structure.</p>
+                    
+                    <h4>Plant Transport Tissues:</h4>
+                    <table>
+                        <tr>
+                            <th>Tissue</th>
+                            <th>Function</th>
+                            <th>Direction of Flow</th>
+                            <th>Components</th>
+                        </tr>
+                        <tr>
+                            <td>Xylem</td>
+                            <td>Transports water and minerals</td>
+                            <td>Roots → Leaves</td>
+                            <td>Tracheids, vessels</td>
+                        </tr>
+                        <tr>
+                            <td>Phloem</td>
+                            <td>Transports food and nutrients</td>
+                            <td>Leaves → Other parts</td>
+                            <td>Sieve tubes, companion cells</td>
+                        </tr>
+                    </table>
+                    
+                    <h4>Transpiration:</h4>
+                    <p>The process of water loss from plant surfaces, primarily through stomata. Transpiration helps in:</p>
+                    <ul>
+                        <li>Creating a suction force for water absorption</li>
+                        <li>Transporting minerals from roots</li>
+                        <li>Cooling plant surfaces</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Excretion Section -->
+            <section class="topic-section">
+                <div class="topic-header">
+                    <i class="fas fa-filter"></i>
+                    <h2>Excretion</h2>
+                </div>
+                
+                <div class="topic-content">
+                    <h3>Human Excretory System</h3>
+                    <p>The excretory system removes nitrogenous wastes from the body and maintains osmotic balance. The main organs include kidneys, ureters, urinary bladder, and urethra.</p>
+                    
+                    <h4>Structure and Function of Nephron:</h4>
+                    <p>The nephron is the functional unit of the kidney where urine formation occurs through three processes:</p>
+                    <ul>
+                        <li><strong>Glomerular Filtration:</strong> Filtration of blood under pressure in glomerulus</li>
+                        <li><strong>Tubular Reabsorption:</strong> Reclaiming useful substances from filtrate</li>
+                        <li><strong>Tubular Secretion:</strong> Adding wastes to the filtrate</li>
+                    </ul>
+                    
+                    <h3>Urine Formation</h3>
+                    <p>Urine formation involves the following steps:</p>
+                    <ol>
+                        <li>Blood enters the kidney through renal artery</li>
+                        <li>Filtration occurs in the glomerulus</li>
+                        <li>Filtrate passes through renal tubule</li>
+                        <li>Reabsorption of glucose, amino acids, and water</li>
+                        <li>Secretion of urea and other wastes</li>
+                        <li>Formation of urine in collecting duct</li>
+                        <li>Urine passes to ureter → urinary bladder → urethra</li>
+                    </ol>
+                    
+                    <h3>Excretion in Plants</h3>
+                    <p>Plants eliminate waste products through various methods:</p>
+                    <ul>
+                        <li>Gaseous waste (O₂, CO₂) diffuses through stomata</li>
+                        <li>Excess water removed through transpiration</li>
+                        <li>Waste products stored in leaves that fall off</li>
+                        <li>Deposition in bark which peels off</li>
+                        <li>Secretion of resins, gums, and latex</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- Revision Section -->
+            <section class="revision-section">
+                <div class="revision-header">
+                    <i class="fas fa-book"></i>
+                    <h2>One-Shot Revision Notes</h2>
+                </div>
+                
+                <div class="revision-grid">
+                    <div class="revision-card">
+                        <h3><i class="fas fa-apple-alt"></i> Nutrition</h3>
+                        <ul>
+                            <li>Autotrophs: Self-nourishing (photosynthesis)</li>
+                            <li>Heterotrophs: Depend on others for food</li>
+                            <li>Photosynthesis: 6CO₂ + 6H₂O → C₆H₁₂O₆ + 6O₂</li>
+                            <li>Stomata: Gas exchange and transpiration</li>
+                            <li>Human digestion: Complex process involving multiple organs</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="revision-card">
+                        <h3><i class="fas fa-lungs"></i> Respiration</h3>
+                        <ul>
+                            <li>Aerobic: With oxygen (36 ATP)</li>
+                            <li>Anaerobic: Without oxygen (2 ATP)</li>
+                            <li>Respiratory pathway: Nostrils → Pharynx → Larynx → Trachea → Bronchi → Alveoli</li>
+                            <li>Alveoli: Site of gas exchange</li>
+                            <li>Breathing: Inhalation (active) and exhalation (passive)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="revision-card">
+                        <h3><i class="fas fa-heartbeat"></i> Transportation</h3>
+                        <ul>
+                            <li>Double circulation: Blood passes heart twice per cycle</li>
+                            <li>Blood components: Plasma, RBCs, WBCs, Platelets</li>
+                            <li>Xylem: Water transport in plants</li>
+                            <li>Phloem: Food transport in plants</li>
+                            <li>Transpiration: Water loss creates suction force</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="revision-card">
+                        <h3><i class="fas fa-filter"></i> Excretion</h3>
+                        <ul>
+                            <li>Human excretory organs: Kidneys, ureters, bladder, urethra</li>
+                            <li>Nephron: Functional unit of kidney</li>
+                            <li>Urine formation: Filtration → Reabsorption → Secretion</li>
+                            <li>Dialysis: Artificial blood filtration</li>
+                            <li>Plant excretion: Through stomata, leaf fall, storage</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>DeepNotes</h3>
+                <p>Comprehensive educational resources for students of all levels. Detailed notes, diagrams, and revision materials for academic success.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Subjects</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Class Notes</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Revision Materials</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Subjects</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Biology</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Physics</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Chemistry</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Mathematics</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> contact@deepnotes.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +1 (123) 456-7890</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> Education Hub, Learning Street</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 DeepNotes Educational Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple interactivity for the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Highlight active navigation
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
